@@ -1,6 +1,7 @@
 import { Container } from 'react-bootstrap';
-import './App.css';
 import { Header, Footer } from './components';
+import './App.css';
+import './bootstrap.custom.css';
 
 const App = () => {
   return (
