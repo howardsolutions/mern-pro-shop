@@ -1,0 +1,15 @@
+{
+  "name": "mern-pro-shop",
+  "version": "1.0.0",
+  "description": "ecommerce application with MERN stack ",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "author": "Howard Phung",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
