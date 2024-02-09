@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import products from '../products.js';
 import { Product } from '../components';
+import { useProducts } from '../hooks/index';
 
 function HomeScreenPage() {
+  const { products } = useProducts();
+
   return (
     <div>
       <h1>Latest Product</h1>
