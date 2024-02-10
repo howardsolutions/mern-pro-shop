@@ -1,15 +1,21 @@
 {
   "name": "iproshop-server",
   "version": "1.0.0",
-  "type": "module",
   "description": "eCommerce application server with node expressjs",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "kill -9 $(lsof -ti:3001,4000,4500,5000,5001) && node server.js",
+    "server": "nodemon server.js"
   },
   "author": "Howard Phung",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.1",
+    "nodemon": "^3.0.3"
   }
 }
