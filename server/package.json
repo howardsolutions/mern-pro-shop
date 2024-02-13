@@ -6,12 +6,15 @@
   "type": "module",
   "scripts": {
     "start": "kill -9 $(lsof -ti:3001,4000,4500,5000,5001) && node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "data:import": "node seeder.js -i",
+    "data:destroy": "node seeder.js -d"
   },
   "author": "Howard Phung",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mongoose": "^8.1.1"
