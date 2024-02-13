@@ -1,10 +1,13 @@
 import express from 'express';
-import { products } from './data/products.js';
 import dotenv from 'dotenv';
-dotenv.config();
 
+dotenv.config();
+// CORS and Connect DB
 import cors from 'cors';
 import connectDB from './config/db.js';
+
+// Routes
+import productRoutes from './routes/productRoutes.js';
 
 const PORT = process.env.PORT || 4000;
 
@@ -16,14 +19,8 @@ const app = express();
 // Enable CORS
 app.use(cors());
 
-app.get('/api/products', (req, res) => {
-  res.json(products);
-});
-
-app.get('/api/products/:id', (req, res) => {
-  const product = products.find((product) => product._id === req.params.id);
-  res.json(product);
-});
+// Routes handler middleware
+app.use('/api/products', productRoutes);
 
 app.listen(PORT, 'localhost', () =>
   console.log(`Server listening on ${PORT} 🚀`)
