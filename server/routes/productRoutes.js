@@ -1,6 +1,6 @@
 import express from 'express';
-import asyncHanler from '../middleware/asyncHandler';
-import Product from '../models/productModel';
+import asyncHanler from '../middleware/asyncHandler.js';
+import Product from '../models/productModel.js';
 
 const router = express.Router();
 
@@ -17,7 +17,8 @@ router.get(
   asyncHanler(async (req, res) => {
     const product = await Product.findById(req.params.id);
 
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    if (!product) {
+    }
 
     res.json(product);
   })

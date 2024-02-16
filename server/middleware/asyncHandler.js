@@ -3,3 +3,5 @@ export default function asyncHanler(fn) {
     return Promise.resolve(fn(req, res, next)).catch(next);
   };
 }
+
+// catch(next) => if any error occured, pass it to Express
