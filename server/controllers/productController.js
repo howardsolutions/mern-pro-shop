@@ -6,7 +6,6 @@ import Product from '../models/productModel.js';
  * @route GET /api/products
  * @access PUBLIC
  */
-
 const getProducts = asyncHanler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);

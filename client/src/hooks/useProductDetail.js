@@ -10,8 +10,6 @@ export function useProductDetail(productId) {
         `http://localhost:4000/api/products/${productId}`
       );
 
-      console.log(data, 'dcm');
-
       setProductDetail(data);
     }
 
