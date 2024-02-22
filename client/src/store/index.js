@@ -1,1 +1,1 @@
-export { useCartStore } from './store';
+export { useCartStore } from './cartStore';

@@ -3,7 +3,9 @@ import { devtools, persist } from 'zustand/middleware';
 import { addDecimals } from '../helper';
 
 const cartStore = (set) => ({
-  cartItems: [],
+  cartItems:
+    JSON.parse(localStorage.getItem('cartStore'))?.state.cartItems || [],
+
   addToCart: (item) =>
     set(
       (store) => {

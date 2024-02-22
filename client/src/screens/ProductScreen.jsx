@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 import { useProductDetail } from '../hooks/index';
 import Loader from '../components/Loader';
-import { useCartStore } from '../store/store';
+import { useCartStore } from '../store/cartStore';
 
 function ProductScreen() {
   const [qty, setQty] = useState(1);
