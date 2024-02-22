@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
 import App from './App';
+// React Router
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from 'react-router-dom';
+
+// UI PAGE
 import HomeScreenPage from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
-
-// Redux
-import store from './store';
-import { Provider } from 'react-redux';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,8 +27,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );

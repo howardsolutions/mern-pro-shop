@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Product } from '../components';
 import { useProducts } from '../hooks/index';
+import Loader from '../components/Loader';
 
 function HomeScreenPage() {
   const { products } = useProducts();
+
+  if (!products) return <Loader />;
 
   return (
     <div>
