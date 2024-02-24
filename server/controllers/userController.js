@@ -1,5 +1,6 @@
 import asyncHanler from '../middleware/asyncHandler.js';
 import User from '../models/userModel.js';
+import jwt from 'jsonwebtoken';
 
 /**
  * @description  Auth user & get token
@@ -18,6 +19,18 @@ const loginUser = asyncHanler(async (req, res) => {
     res.status(401);
     throw new Error('Invalid email or password');
   }
+
+const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+
+  // set JWT as Http-only cookie
+  res.cookie('jwt', token, {
+    httpOnly: true,
+    sameSite: 'strict',
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    secure: process.env.NODE_ENV !== 'development', // for https on production, in dev we don't have https
+  });
 
   res.json({
     _id: user._id,
