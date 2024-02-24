@@ -7,8 +7,8 @@ import User from '../models/userModel.js';
  * @access PUBLIC
  */
 
-const authUser = asyncHanler(async (req, res) => {
-  res.send('auth user');
+const loginUser = asyncHanler(async (req, res) => {
+  res.send('auth user login');
 });
 
 /**
@@ -87,7 +87,7 @@ const updateUser = asyncHanler(async (req, res) => {
 });
 
 export {
-  authUser,
+  loginUser,
   registerUser,
   logoutUser,
   getUserProfile,
