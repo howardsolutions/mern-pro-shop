@@ -8,7 +8,23 @@ import User from '../models/userModel.js';
  */
 
 const loginUser = asyncHanler(async (req, res) => {
-  res.send('auth user login');
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  const isCorrectedPassword = await user.matchPassword(password);
+
+  if (!user || !isCorrectedPassword) {
+    res.status(401);
+    throw new Error('Invalid email or password');
+  }
+
+  res.json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+  });
 });
 
 /**

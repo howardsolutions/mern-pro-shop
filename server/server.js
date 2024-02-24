@@ -22,6 +22,10 @@ connectDB();
 
 const app = express();
 
+// Body parser middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // Enable CORS
 app.use(cors());
 
