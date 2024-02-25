@@ -12,13 +12,13 @@ import {
 } from 'react-bootstrap';
 import { useProductDetail } from '../hooks/index';
 import Loader from '../components/Loader';
-import { useCartStore } from '../store/cartStore';
+import { useBoundStore } from '../store/index';
 
 function ProductScreen() {
   const [qty, setQty] = useState(1);
   const { id: productId } = useParams();
 
-  const addToCart = useCartStore((store) => store.addToCart);
+  const addToCart = useBoundStore((store) => store.addToCart);
   const navigate = useNavigate();
 
   const { productDetail: product } = useProductDetail(productId);

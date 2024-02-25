@@ -10,12 +10,12 @@ import {
 } from 'react-bootstrap';
 import { FaTrash } from 'react-icons/fa';
 import Message from '../components/Message';
-import { useCartStore } from '../store/cartStore';
+import { useBoundStore } from '../store';
 
 const CartScreen = () => {
-  const cartItems = useCartStore((store) => store.cartItems);
-  const addToCart = useCartStore((store) => store.addToCart);
-  const removeFromCart = useCartStore((store) => store.removeFromCart);
+  const cartItems = useBoundStore((store) => store.cartItems);
+  const addToCart = useBoundStore((store) => store.addToCart);
+  const removeFromCart = useBoundStore((store) => store.removeFromCart);
   const navigate = useNavigate();
 
   const addToCartHandler = (product, qty) => {

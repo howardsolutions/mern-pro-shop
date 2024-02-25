@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { addDecimals } from '../helper';
 
-const cartStore = (set) => ({
+export const createCartStore = (set) => ({
   cartItems:
     JSON.parse(localStorage.getItem('cartStore'))?.state.cartItems || [],
 
@@ -52,7 +52,3 @@ const cartStore = (set) => ({
       cartItems: store.cartItems.filter((item) => item._id !== id),
     })),
 });
-
-export const useCartStore = create(
-  persist(devtools(cartStore), { name: 'cartStore' })
-);
