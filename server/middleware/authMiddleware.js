@@ -4,10 +4,8 @@ import User from '../models/userModel.js';
 
 // Protected Routes (required user to logged in to access the api)
 const protect = asyncHanler(async (req, res, next) => {
-  let token;
-
   // Read the token from jwt
-  token = req.cookies.jwt;
+  let token = req.cookies.jwt;
 
   if (!token) {
     res.status(401);

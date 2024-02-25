@@ -1,6 +1,6 @@
 import asyncHanler from '../middleware/asyncHandler.js';
 import User from '../models/userModel.js';
-import generateToken from '../utils/generateToken';
+import generateToken from '../utils/generateToken.js';
 
 /**
  * @description  Auth user & get token
@@ -23,7 +23,7 @@ const loginUser = asyncHanler(async (req, res) => {
   // generate jwt token
   generateToken(res, user._id);
 
-  res.json({
+  res.status(200).json({
     _id: user._id,
     name: user.name,
     email: user.email,
@@ -87,7 +87,19 @@ const logoutUser = asyncHanler(async (req, res) => {
  */
 
 const getUserProfile = asyncHanler(async (req, res) => {
-  res.send('get profile');
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  res.status(200).json({
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+  });
 });
 
 /**
@@ -96,7 +108,28 @@ const getUserProfile = asyncHanler(async (req, res) => {
  * @access Private
  */
 const updateUserProfile = asyncHanler(async (req, res) => {
-  res.send('update profile');
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+
+  if (req.body.password) {
+    user.password = req.body.password;
+  }
+
+  const updatedUser = await user.save();
+
+  res.status(200).json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+  });
 });
 
 /**
