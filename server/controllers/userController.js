@@ -1,6 +1,6 @@
 import asyncHanler from '../middleware/asyncHandler.js';
 import User from '../models/userModel.js';
-import jwt from 'jsonwebtoken';
+import generateToken from '../utils/generateToken';
 
 /**
  * @description  Auth user & get token
@@ -20,17 +20,8 @@ const loginUser = asyncHanler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-
-  // set JWT as Http-only cookie
-  res.cookie('jwt', token, {
-    httpOnly: true,
-    sameSite: 'strict',
-    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    secure: process.env.NODE_ENV !== 'development', // for https on production, in dev we don't have https
-  });
+  // generate jwt token
+  generateToken(res, user._id);
 
   res.json({
     _id: user._id,
@@ -47,7 +38,31 @@ const loginUser = asyncHanler(async (req, res) => {
  */
 
 const registerUser = asyncHanler(async (req, res) => {
-  res.send('register user');
+  const { name, email, password } = req.body;
+
+  const isExistedUser = await User.findOne({ email });
+
+  if (isExistedUser) {
+    res.status(400);
+    throw new Error('User already exists');
+  }
+
+  const newUser = await User.create({ name, email, password });
+
+  if (!newUser) {
+    res.status(400);
+    throw new Error('Invalid user data!');
+  }
+
+  // Allow user to login right away after registration
+  generateToken(res, newUser._id);
+
+  res.status(201).json({
+    _id: newUser._id,
+    name: newUser.name,
+    email: newUser.email,
+    isAdmin: newUser.isAdmin,
+  });
 });
 
 /**
