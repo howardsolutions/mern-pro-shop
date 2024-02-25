@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
 import asyncHanler from './asyncHandler.js';
-import User from '../models/userModel';
+import User from '../models/userModel.js';
 
 // Protected Routes (required user to logged in to access the api)
-export const protect = asyncHanler(async (req, res, next) => {
+const protect = asyncHanler(async (req, res, next) => {
   let token;
 
   // Read the token from jwt
-  token = req.cookie.jwt;
+  token = req.cookies.jwt;
 
   if (!token) {
     res.status(401);

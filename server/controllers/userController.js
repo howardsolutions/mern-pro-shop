@@ -20,7 +20,7 @@ const loginUser = asyncHanler(async (req, res) => {
     throw new Error('Invalid email or password');
   }
 
-const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 
@@ -57,7 +57,12 @@ const registerUser = asyncHanler(async (req, res) => {
  */
 
 const logoutUser = asyncHanler(async (req, res) => {
-  res.send('logout');
+  res.cookie('jwt', null, {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
+  res.status(200).json({ message: 'Logged out successfully' });
 });
 
 /**
