@@ -26,4 +26,14 @@ export const createAuthStore = (set) => ({
       throw error;
     }
   },
+  logout: async () => {
+    try {
+      await axios.post(`${BASE_URL}/api/users/logout`, null, {
+        withCredentials: true,
+      });
+      set({ userInfo: null });
+    } catch (error) {
+      throw error;
+    }
+  },
 });

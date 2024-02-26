@@ -4,11 +4,23 @@ import { FaShoppingCart, FaUser } from 'react-icons/fa';
 import logo from '../../public/assets/logo.png';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useBoundStore } from '../store/index';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
   const cartItems = useBoundStore((store) => store.cartItems);
   const userInfo = useBoundStore((store) => store.userInfo);
+  const logout = useBoundStore((store) => store.logout);
+  const navigate = useNavigate();
   const totalItemsInCart = cartItems.reduce((acc, cur) => acc + cur.qty, 0);
+
+  async function logoutHandler() {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <header>
@@ -40,7 +52,7 @@ export function Header() {
                     <LinkContainer to='/profile'>
                       <NavDropdown.Item>Profile</NavDropdown.Item>
                     </LinkContainer>
-                    <NavDropdown.Item onClick={() => {}}>
+                    <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>
                   </NavDropdown>
