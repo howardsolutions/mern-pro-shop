@@ -5,22 +5,35 @@ import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { toast } from 'react-toastify';
+import { useBoundStore } from '../store/index';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigate = useNavigate();
+  const login = useBoundStore((store) => store.login);
+  const isLoadingUserInfo = useBoundStore((store) => store.isLoadingUserInfo);
+  const userInfo = useBoundStore((store) => store.userInfo);
 
+  const navigate = useNavigate();
   const { search } = useLocation();
 
-  const redirect = '';
+  const searchParams = new URLSearchParams(search);
+
+  const redirect = searchParams.get('redirect') || '/';
+
+  if (userInfo) {
+    navigate(redirect);
+  }
 
   const submitHandler = async (e) => {
-    e.preventDefault();
     try {
+      e.preventDefault();
+      await login({ email, password });
+      navigate(redirect);
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      console.log(err, 'login error');
+      toast.error(err?.response?.data.message);
     }
   };
 
@@ -49,9 +62,11 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button disabled={isLoadingUserInfo} type='submit' variant='primary'>
           Sign In
         </Button>
+
+        {isLoadingUserInfo && <Loader />}
       </Form>
 
       <Row className='py-3'>
