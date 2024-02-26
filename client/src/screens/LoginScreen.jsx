@@ -14,6 +14,8 @@ const LoginScreen = () => {
 
   const { search } = useLocation();
 
+  const redirect = '';
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
