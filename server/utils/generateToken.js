@@ -5,11 +5,11 @@ export default function generateToken(res, userId) {
     expiresIn: '30d',
   });
 
-  // set JWT as Http-only cookie
+  // Set JWT as an HTTP-Only cookie
   res.cookie('jwt', token, {
     httpOnly: true,
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
+    sameSite: 'strict', // Prevent CSRF attacks
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    secure: process.env.NODE_ENV !== 'development', // for https on production, in dev we don't have https
   });
 }

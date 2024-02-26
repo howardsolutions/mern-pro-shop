@@ -11,6 +11,11 @@ import generateToken from '../utils/generateToken.js';
 const loginUser = asyncHanler(async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    res.status(400);
+    throw new Error('Email and password are required');
+  }
+
   const user = await User.findOne({ email });
 
   const isCorrectedPassword = await user.matchPassword(password);
