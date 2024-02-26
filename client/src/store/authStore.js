@@ -29,8 +29,19 @@ export const createAuthStore = (set) => ({
       throw error;
     }
   },
-  register: async () => {
+  register: async ({ name, email, password }) => {
     try {
-    } catch (error) {}
+      set({ isLoadingRegister: true });
+      const response = await axiosInstance.post(`/api/users`, {
+        email,
+        password,
+        name,
+      });
+      set({ userInfo: response.data, isLoadingRegister: false });
+    } catch (error) {
+      set({ isLoadingRegister: false });
+
+      throw error;
+    }
   },
 });

@@ -14,6 +14,7 @@ const RegisterScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const userInfo = useBoundStore((store) => store.userInfo);
   const isLoadingRegister = useBoundStore((store) => store.isLoadingRegister);
+  const register = useBoundStore((store) => store.register);
 
   const navigate = useNavigate();
 
@@ -31,13 +32,15 @@ const RegisterScreen = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-    } else {
-      try {
-        navigate(redirect);
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+      return toast.error('Passwords do not match');
+    }
+
+    try {
+      await register({ name, email, password });
+      navigate(redirect);
+    } catch (err) {
+      console.log(err, 'login error');
+      toast.error(err?.response?.data.message);
     }
   };
 
