@@ -1,10 +1,8 @@
-import { create } from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
 import { addDecimals } from '../helper';
 
 export const createCartStore = (set) => ({
   cartItems:
-    JSON.parse(localStorage.getItem('cartStore'))?.state.cartItems || [],
+    JSON.parse(localStorage.getItem('boundStore'))?.state.cartItems || [],
 
   addToCart: (item) =>
     set(

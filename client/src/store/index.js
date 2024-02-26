@@ -5,10 +5,12 @@ import { devtools, persist } from 'zustand/middleware';
 
 export const useBoundStore = create(
   devtools(
-    persist((...args) => ({
-      ...createAuthStore(...args),
-      ...createCartStore(...args),
-    }))
-  ),
-  { name: 'bound-store' }
+    persist(
+      (...args) => ({
+        ...createAuthStore(...args),
+        ...createCartStore(...args),
+      }),
+      { name: 'boundStore' }
+    )
+  )
 );
