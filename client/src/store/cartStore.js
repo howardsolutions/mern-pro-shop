@@ -4,6 +4,11 @@ export const createCartStore = (set) => ({
   cartItems:
     JSON.parse(localStorage.getItem('boundStore'))?.state.cartItems || [],
 
+  shippingAddress: null,
+  paymentMethod: 'PayPal',
+
+  saveShippingAddress: (address) => set({ shippingAddress: address }),
+
   addToCart: (item) =>
     set(
       (store) => {

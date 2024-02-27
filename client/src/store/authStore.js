@@ -1,4 +1,3 @@
-import { BASE_URL } from '../constants.js';
 import { axiosInstance } from '../axiosConfig';
 
 export const createAuthStore = (set) => ({
