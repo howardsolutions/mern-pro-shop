@@ -15,7 +15,7 @@ import { useBoundStore } from '../store';
 const CartScreen = () => {
   const cartItems = useBoundStore((store) => store.cartItems);
   const addToCart = useBoundStore((store) => store.addToCart);
-  const removeFromCart = useBoundStore((store) => store.removeFromCart);
+  const removeItemFromCart = useBoundStore((store) => store.removeItemFromCart);
   const navigate = useNavigate();
 
   const addToCartHandler = (product, qty) => {
@@ -23,7 +23,7 @@ const CartScreen = () => {
   };
 
   const removeFromCartHandler = (id) => {
-    removeFromCart(id);
+    removeItemFromCart(id);
   };
 
   const checkoutHandler = () => {

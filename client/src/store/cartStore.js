@@ -54,12 +54,14 @@ export const createCartStore = (set) => ({
       'addToCart'
     ),
 
-  removeFromCart: (id) =>
+  removeItemFromCart: (id) =>
     set(
       (store) => ({
         cartItems: store.cartItems.filter((item) => item._id !== id),
       }),
       false,
-      'removeFromCart'
+      'removeItemFromCart'
     ),
+
+  clearCartItems: () => set({ cartItems: [] }, false, 'clearCartItems'),
 });
