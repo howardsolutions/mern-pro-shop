@@ -12,7 +12,7 @@ const getProducts = asyncHanler(async (req, res) => {
 });
 
 /**
- * Fetch a product
+ * Fetch a product details
  * @route GET /api/products/:id
  * @access PUBLIC
  */
