@@ -24,13 +24,13 @@ const getMyOrders = asyncHanler(async (req, res) => {
  * @route GET /api/orders/:id
  * @access PRIVATE
  */
-const getMyOrder = asyncHanler(async (req, res) => {
+const getOrderById = asyncHanler(async (req, res) => {
   res.send('get my order');
 });
 
 /**
  * @desciption Update order status to Paid
- * @route GET /api/orders/:id
+ * @route PUT /api/orders/pay
  * @access PRIVATE/ admin
  */
 const updateOrderStatusToPaid = asyncHanler(async (req, res) => {
@@ -39,7 +39,7 @@ const updateOrderStatusToPaid = asyncHanler(async (req, res) => {
 
 /**
  * @desciption Update order status to Paid
- * @route GET /api/orders/:id
+ * @route PUT /api/orders/deliver
  * @access PRIVATE / admin
  */
 const updateOrderStatusToDelivered = asyncHanler(async (req, res) => {
@@ -57,7 +57,7 @@ const getOrders = asyncHanler(async (req, res) => {
 
 export {
   getOrders,
-  getMyOrder,
+  getOrderById,
   updateOrderStatusToDelivered,
   updateOrderStatusToPaid,
   getMyOrders,
