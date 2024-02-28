@@ -11,7 +11,7 @@ const PaymentScreen = () => {
   const savePaymentMethod = useBoundStore((store) => store.savePaymentMethod);
 
   useEffect(() => {
-    if (!shippingAddress.address) {
+    if (!shippingAddress?.address) {
       navigate('/shipping');
     }
   }, [navigate, shippingAddress]);
