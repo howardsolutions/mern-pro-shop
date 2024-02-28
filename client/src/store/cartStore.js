@@ -9,6 +9,8 @@ export const createCartStore = (set) => ({
 
   saveShippingAddress: (address) => set({ shippingAddress: address }),
 
+  savePaymentMethod: (paymentMethod) => set({ paymentMethod: paymentMethod }),
+
   addToCart: (item) =>
     set(
       (store) => {
