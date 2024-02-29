@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 // import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import { useOrderDetails } from '../hooks/index';
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
-  const isLoading = false;
   const error = null;
+  const { orderDetails: order } = useOrderDetails(orderId);
 
   // TESTING ONLY! REMOVE BEFORE PRODUCTION
   // async function onApproveTest() {
@@ -19,7 +19,7 @@ const OrderScreen = () => {
   //   toast.success('Order is paid');
   // }
 
-  if (isLoading) {
+  if (!order) {
     return <Loader />;
   }
 
@@ -137,36 +137,37 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+
               {!order.isPaid && (
                 <ListGroup.Item>
-                  {loadingPay && <Loader />}
+                  {/* {loadingPay && <Loader />} */}
 
-                  {isPending ? (
+                  {/* {isPending ? (
                     <Loader />
-                  ) : (
-                    <div>
-                      {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
-                      {/* <Button
+                  ) : ( */}
+                  <div>
+                    {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
+                    {/* <Button
                         style={{ marginBottom: '10px' }}
                         onClick={onApproveTest}
                       >
                         Test Pay Order
                       </Button> */}
 
-                      <div>
-                        <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
-                          onError={onError}
-                        ></PayPalButtons>
-                      </div>
-                    </div>
-                  )}
+                    {/* <div>
+                      <PayPalButtons
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                      ></PayPalButtons>
+                    </div> */}
+                  </div>
+                  {/* )} */}
                 </ListGroup.Item>
               )}
 
-              {loadingDeliver && <Loader />}
-
+              {/* {loadingDeliver && <Loader />} */}
+              {/* 
               {userInfo &&
                 userInfo.isAdmin &&
                 order.isPaid &&
@@ -180,7 +181,7 @@ const OrderScreen = () => {
                       Mark As Delivered
                     </Button>
                   </ListGroup.Item>
-                )}
+                )} */}
             </ListGroup>
           </Card>
         </Col>

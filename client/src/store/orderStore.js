@@ -17,15 +17,4 @@ export const createOrderStore = (set) => ({
       throw error;
     }
   },
-  getOrderDetails: async (orderId) => {
-    set({ isLoadingOrderDetails: true });
-
-    try {
-      const orderDetail = await axiosInstance.get(`api/orders/${orderId}`);
-      set({ isLoadingOrderDetails: false });
-    } catch (error) {
-      set({ isLoadingOrderDetails: false });
-      throw error;
-    }
-  },
 });
