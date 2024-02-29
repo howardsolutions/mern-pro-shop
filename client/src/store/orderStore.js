@@ -35,9 +35,4 @@ export const createOrderStore = (set) => ({
       throw error;
     }
   },
-
-  getPayPalClientId: async () => {
-    const { clientId } = await axiosInstance.get('/api/config/paypal');
-    return clientId;
-  },
 });

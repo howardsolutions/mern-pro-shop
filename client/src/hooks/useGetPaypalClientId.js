@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
-
 import { axiosInstance } from '../axiosConfig';
 
-export function useOrderDetails(productId) {
-  const [orderDetails, setOrderDetails] = useState(null);
+export function useGetPaypalClientId() {
+  const [paypalClientId, setPaypalClientId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    async function fetchOrderDetails() {
+    async function getPaypalClientId() {
       setIsLoading(true);
       setError(null);
       try {
-        const { data } = await axiosInstance(`/api/orders/${productId}`);
-        setOrderDetails(data);
+        const { clientId } = await axiosInstance(`/api/config/paypal`);
+        setPaypalClientId(clientId);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -21,8 +20,8 @@ export function useOrderDetails(productId) {
       }
     }
 
-    fetchOrderDetails();
+    getPaypalClientId();
   }, []);
 
-  return { orderDetails, isLoading, error };
+  return { paypalClientId, isLoading, error };
 }
