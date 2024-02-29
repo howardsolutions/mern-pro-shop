@@ -2,7 +2,7 @@ import { axiosInstance } from '../axiosConfig';
 
 export const createOrderStore = (set) => ({
   isCreateOrderLoading: false,
-  isLoadingOrderDetails: false,
+  isPayOrderLoading: false,
 
   createOrder: async (order) => {
     set({ isCreateOrderLoading: true });
@@ -18,5 +18,26 @@ export const createOrderStore = (set) => ({
     }
   },
 
-  payOrder: async (orderId, orderDetail) => {},
+  payOrder: async (orderId, orderDetail) => {
+    try {
+      set({ isPayOrderLoading: true });
+
+      const updatedOrder = await axiosInstance.post(
+        `api/orders/${orderId}`,
+        orderDetail
+      );
+
+      set({ isPayOrderLoading: false });
+
+      return updatedOrder;
+    } catch (error) {
+      set({ isPayOrderLoading: false });
+      throw error;
+    }
+  },
+
+  getPayPalClientId: async () => {
+    const { clientId } = await axiosInstance.get('/api/config/paypal');
+    return clientId;
+  },
 });
