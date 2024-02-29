@@ -17,4 +17,6 @@ export const createOrderStore = (set) => ({
       throw error;
     }
   },
+
+  payOrder: async (orderId, orderDetail) => {},
 });
