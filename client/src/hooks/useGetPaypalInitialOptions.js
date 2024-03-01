@@ -1,10 +1,22 @@
 import { useState, useEffect } from 'react';
 import { axiosInstance } from '../axiosConfig';
 
-export function useGetPaypalClientId() {
+function getPaypalInitialOptions(clientId) {
+  const initialOptions = {
+    'client-id': clientId,
+    currency: 'USD',
+    intent: 'capture',
+  };
+
+  return initialOptions;
+}
+
+export function useGetPaypalInitialOptions() {
   const [paypalClientId, setPaypalClientId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  let paypalInitialOptions;
 
   useEffect(() => {
     async function getPaypalClientId() {
@@ -13,6 +25,7 @@ export function useGetPaypalClientId() {
       try {
         const { clientId } = await axiosInstance(`/api/config/paypal`);
         setPaypalClientId(clientId);
+        paypalInitialOptions = getPaypalInitialOptions(clientId);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
@@ -23,5 +36,5 @@ export function useGetPaypalClientId() {
     getPaypalClientId();
   }, []);
 
-  return { paypalClientId, isLoading, error };
+  return { paypalClientId, paypalInitialOptions, isLoading, error };
 }

@@ -1,11 +1,10 @@
-import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { useOrderDetails, useGetPaypalClientId } from '../hooks/index';
+import { useOrderDetails } from '../hooks/index';
 import { useBoundStore } from '../store/index';
 
 const OrderScreen = () => {
@@ -23,33 +22,7 @@ const OrderScreen = () => {
   const isPayOrderLoading = useBoundStore((store) => store.isPayOrderLoading);
   const payOrder = useBoundStore((store) => store.payOrder);
 
-  const {
-    isLoading: paypalLoading,
-    error: paypalError,
-    paypalClientId,
-  } = useGetPaypalClientId();
-
-  const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
-  useEffect(() => {
-    if (!paypalLoading && !paypalError && paypalClientId) {
-      const loadPaypalScript = async () => {
-        paypalDispatch({
-          type: 'resetOptions',
-          value: {
-            'client-id': paypalClientId,
-            currency: 'USD',
-          },
-        });
-        paypalDispatch({ type: 'setLoadingStatus', value: 'pending' });
-      };
-      if (order && !order.isPaid) {
-        if (!window.paypal) {
-          loadPaypalScript();
-        }
-      }
-    }
-  }, [paypalLoading, order, paypalClientId, paypalDispatch]);
+  const [{ isPending }, dispatch] = usePayPalScriptReducer();
 
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
@@ -221,10 +194,15 @@ const OrderScreen = () => {
                       </Button>
                       <div>
                         <PayPalButtons
-                          createOrder={createOrder}
-                          onApprove={onApprove}
+                          style={{ layout: 'vertical' }}
+                          createOrder={(data, actions) =>
+                            createOrder(data, actions)
+                          }
+                          onApprove={(data, actions) =>
+                            onApprove(data, actions)
+                          }
                           onError={onError}
-                        ></PayPalButtons>
+                        />
                       </div>
                     </div>
                   )}

@@ -10,8 +10,6 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-
 // UI PAGE
 import HomeScreenPage from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
@@ -48,8 +46,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <PayPalScriptProvider deferLoading={true}>
-      <RouterProvider router={router} />
-    </PayPalScriptProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
