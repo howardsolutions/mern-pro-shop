@@ -11,12 +11,18 @@ import { useBoundStore } from '../store/index';
 const OrderScreen = () => {
   const { id: orderId } = useParams();
 
-  const { orderDetails: order, error, isLoading } = useOrderDetails(orderId);
+  const {
+    orderDetails: order,
+    error,
+    isLoading,
+    refetch: refetchOrder,
+  } = useOrderDetails(orderId);
 
   const userInfo = useBoundStore((store) => store.userInfo);
 
   const isPayOrderLoading = useBoundStore((store) => store.isPayOrderLoading);
   const payOrder = useBoundStore((store) => store.payOrder);
+
   const {
     isLoading: paypalLoading,
     error: paypalError,
@@ -45,13 +51,39 @@ const OrderScreen = () => {
     }
   }, [paypalLoading, order, paypalClientId, paypalDispatch]);
 
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        await payOrder({ orderId, details });
+        refetchOrder(true);
+        toast.success('Order is paid');
+      } catch (err) {
+        toast.error(err?.data?.message || err.error);
+      }
+    });
+  }
   // TESTING ONLY! REMOVE BEFORE PRODUCTION
-  // async function onApproveTest() {
-  //   await payOrder({ orderId, details: { payer: {} } });
-  //   refetch();
+  async function onApproveTest() {
+    await payOrder({ orderId, details: { payer: {} } });
+    refetchOrder(true);
 
-  //   toast.success('Order is paid');
-  // }
+    toast.success('Order is paid');
+  }
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: order.totalPrice },
+          },
+        ],
+      })
+      .then((orderID) => orderID);
+  }
+
+  function onError(err) {
+    toast.error(err.message);
+  }
 
   if (isLoading) {
     return <Loader />;
@@ -174,29 +206,28 @@ const OrderScreen = () => {
 
               {!order?.isPaid && (
                 <ListGroup.Item>
-                  {/* {loadingPay && <Loader />} */}
+                  {isPayOrderLoading && <Loader />}
 
-                  {/* {isPending ? (
+                  {isPending ? (
                     <Loader />
-                  ) : ( */}
-                  <div>
-                    {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
-                    {/* <Button
+                  ) : (
+                    <div>
+                      THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION!
+                      <Button
                         style={{ marginBottom: '10px' }}
                         onClick={onApproveTest}
                       >
                         Test Pay Order
-                      </Button> */}
-
-                    {/* <div>
-                      <PayPalButtons
-                        createOrder={createOrder}
-                        onApprove={onApprove}
-                        onError={onError}
-                      ></PayPalButtons>
-                    </div> */}
-                  </div>
-                  {/* )} */}
+                      </Button>
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
+                    </div>
+                  )}
                 </ListGroup.Item>
               )}
 

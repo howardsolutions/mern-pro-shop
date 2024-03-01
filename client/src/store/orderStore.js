@@ -18,13 +18,13 @@ export const createOrderStore = (set) => ({
     }
   },
 
-  payOrder: async (orderId, orderDetail) => {
+  payOrder: async ({ orderId, details }) => {
     try {
       set({ isPayOrderLoading: true });
 
-      const updatedOrder = await axiosInstance.post(
-        `api/orders/${orderId}`,
-        orderDetail
+      const updatedOrder = await axiosInstance.put(
+        `api/orders/${orderId}/pay`,
+        details
       );
 
       set({ isPayOrderLoading: false });
