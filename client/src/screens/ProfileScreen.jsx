@@ -8,6 +8,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useBoundStore } from '../store/index';
 import useUserProfileFormFields from '../hooks/useUserProfileFormFields';
+import { useGetMyOrders } from '../hooks/useGetMyOrders';
 
 const ProfileScreen = () => {
   const [{ name, email, password, confirmPassword }, setUserProfileFormFields] =
@@ -17,6 +18,8 @@ const ProfileScreen = () => {
   const isLoadingUpdateProfile = useBoundStore(
     (store) => store.isLoadingUpdateProfile
   );
+
+  const { isLoading, error, myOrders: orders } = useGetMyOrders();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ const ProfileScreen = () => {
       });
       toast.success('Profile updated successfully');
     } catch (err) {
-      toast.error(err?.data?.message || err.error);
+      toast.error(err?.message || err.error);
     }
   };
 
@@ -64,7 +67,7 @@ const ProfileScreen = () => {
               type='email'
               placeholder='Enter email'
               value={email}
-              onChange={() =>
+              onChange={(e) =>
                 setUserProfileFormFields((prevState) => ({
                   ...prevState,
                   email: e.target.value,
@@ -79,7 +82,7 @@ const ProfileScreen = () => {
               type='password'
               placeholder='Enter password'
               value={password}
-              onChange={() =>
+              onChange={(e) =>
                 setUserProfileFormFields((prevState) => ({
                   ...prevState,
                   password: e.target.value,
@@ -94,7 +97,7 @@ const ProfileScreen = () => {
               type='password'
               placeholder='Confirm password'
               value={confirmPassword}
-              onChange={() =>
+              onChange={(e) =>
                 setUserProfileFormFields((prevState) => ({
                   ...prevState,
                   confirmPassword: e.target.value,
@@ -115,9 +118,7 @@ const ProfileScreen = () => {
         {isLoading ? (
           <Loader />
         ) : error ? (
-          <Message variant='danger'>
-            {error?.data?.message || error.error}
-          </Message>
+          <Message variant='danger'>{error?.message || error.error}</Message>
         ) : (
           <Table striped hover responsive className='table-sm'>
             <thead>
@@ -131,7 +132,7 @@ const ProfileScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {orders?.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.createdAt.substring(0, 10)}</td>

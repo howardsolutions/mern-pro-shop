@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useBoundStore } from '../store';
 
 const initialOptions = {
   name: '',
