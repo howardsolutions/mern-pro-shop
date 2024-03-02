@@ -14,6 +14,9 @@ const ProfileScreen = () => {
     useUserProfileFormFields();
 
   const updateUserProfile = useBoundStore((store) => store.updateUserProfile);
+  const isLoadingUpdateProfile = useBoundStore(
+    (store) => store.isLoadingUpdateProfile
+  );
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -103,9 +106,10 @@ const ProfileScreen = () => {
           <Button type='submit' variant='primary'>
             Update
           </Button>
-          {loadingUpdateProfile && <Loader />}
+          {isLoadingUpdateProfile && <Loader />}
         </Form>
       </Col>
+
       <Col md={9}>
         <h2>My Orders</h2>
         {isLoading ? (

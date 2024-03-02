@@ -4,8 +4,10 @@ export const createAuthStore = (set) => ({
   userInfo: localStorage.getItem('boundStore')
     ? JSON.parse(localStorage.getItem('boundStore'))?.state.userInfo
     : null,
+
   isLoadingUserInfo: false,
   isLoadingRegister: false,
+  isLoadingUpdateProfile: false,
 
   login: async ({ email, password }) => {
     try {
@@ -49,9 +51,13 @@ export const createAuthStore = (set) => ({
 
   updateUserProfile: async (userData) => {
     try {
+      set({ isLoadingUpdateProfile: true });
+
       const response = await axiosInstance.put(`/api/users/profile`, userData);
       set({ userInfo: response.data });
+      set({ isLoadingUpdateProfile: false });
     } catch (error) {
+      set({ isLoadingUpdateProfile: false });
       throw error;
     }
   },
