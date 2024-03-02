@@ -43,4 +43,14 @@ export const createAuthStore = (set) => ({
       throw error;
     }
   },
+
+  updateProfile: async (userData) => {
+    try {
+      const response = await axiosInstance.put(`/api/users/profile`, userData);
+      const updatedUser = response.data;
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
+  },
 });
