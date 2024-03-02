@@ -7,36 +7,38 @@ import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useBoundStore } from '../store/index';
+import useUserProfileFormFields from '../hooks/useUserProfileFormFields';
 
 const ProfileScreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [{ name, email, password, confirmPassword }, setUserProfile] =
+    useUserProfileFormFields();
 
   const userInfo = useBoundStore((store) => store.userInfo);
+  const updateUserProfile = useBoundStore((store) => store.updateUserProfile);
 
   useEffect(() => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
+    setUserProfile((prevState) => ({
+      ...prevState,
+      email: userInfo.email,
+      name: userInfo.name,
+    }));
   }, [userInfo.email, userInfo.name]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
-    } else {
-      try {
-        const res = await updateProfile({
-          name,
-          email,
-          password,
-        }).unwrap();
-        dispatch(setCredentials({ ...res }));
-        toast.success('Profile updated successfully');
-      } catch (err) {
-        toast.error(err?.data?.message || err.error);
-      }
+      return toast.error('Passwords do not match');
+    }
+
+    try {
+      await updateUserProfile({
+        name,
+        email,
+        password,
+      });
+      toast.success('Profile updated successfully');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 

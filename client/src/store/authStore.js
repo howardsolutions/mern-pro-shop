@@ -6,6 +6,7 @@ export const createAuthStore = (set) => ({
     : null,
   isLoadingUserInfo: false,
   isLoadingRegister: false,
+
   login: async ({ email, password }) => {
     try {
       set({ isLoadingUserInfo: true });
@@ -20,6 +21,7 @@ export const createAuthStore = (set) => ({
       throw error;
     }
   },
+
   logout: async () => {
     try {
       await axiosInstance.post(`/api/users/logout`);
@@ -28,6 +30,7 @@ export const createAuthStore = (set) => ({
       throw error;
     }
   },
+
   register: async ({ name, email, password }) => {
     try {
       set({ isLoadingRegister: true });
@@ -44,11 +47,10 @@ export const createAuthStore = (set) => ({
     }
   },
 
-  updateProfile: async (userData) => {
+  updateUserProfile: async (userData) => {
     try {
       const response = await axiosInstance.put(`/api/users/profile`, userData);
-      const updatedUser = response.data;
-      return updatedUser;
+      set({ userInfo: response.data });
     } catch (error) {
       throw error;
     }
