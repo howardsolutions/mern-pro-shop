@@ -10,22 +10,14 @@ import { useBoundStore } from '../store/index';
 import useUserProfileFormFields from '../hooks/useUserProfileFormFields';
 
 const ProfileScreen = () => {
-  const [{ name, email, password, confirmPassword }, setUserProfile] =
+  const [{ name, email, password, confirmPassword }, setUserProfileFormFields] =
     useUserProfileFormFields();
 
-  const userInfo = useBoundStore((store) => store.userInfo);
   const updateUserProfile = useBoundStore((store) => store.updateUserProfile);
-
-  useEffect(() => {
-    setUserProfile((prevState) => ({
-      ...prevState,
-      email: userInfo.email,
-      name: userInfo.name,
-    }));
-  }, [userInfo.email, userInfo.name]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       return toast.error('Passwords do not match');
     }
@@ -54,7 +46,12 @@ const ProfileScreen = () => {
               type='text'
               placeholder='Enter name'
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setUserProfileFormFields((prevState) => ({
+                  ...prevState,
+                  name: e.target.value,
+                }))
+              }
             ></Form.Control>
           </Form.Group>
 
@@ -64,7 +61,12 @@ const ProfileScreen = () => {
               type='email'
               placeholder='Enter email'
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={() =>
+                setUserProfileFormFields((prevState) => ({
+                  ...prevState,
+                  email: e.target.value,
+                }))
+              }
             ></Form.Control>
           </Form.Group>
 
@@ -74,7 +76,12 @@ const ProfileScreen = () => {
               type='password'
               placeholder='Enter password'
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={() =>
+                setUserProfileFormFields((prevState) => ({
+                  ...prevState,
+                  password: e.target.value,
+                }))
+              }
             ></Form.Control>
           </Form.Group>
 
@@ -84,7 +91,12 @@ const ProfileScreen = () => {
               type='password'
               placeholder='Confirm password'
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={() =>
+                setUserProfileFormFields((prevState) => ({
+                  ...prevState,
+                  confirmPassword: e.target.value,
+                }))
+              }
             ></Form.Control>
           </Form.Group>
 

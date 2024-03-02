@@ -8,9 +8,19 @@ const initialOptions = {
 };
 
 function useUserProfileFormFields() {
-  const [userProfile, setUserProfile] = useState(initialOptions);
+  const [userProfileFormFields, setUserProfileFormFields] =
+    useState(initialOptions);
+  const userInfo = useBoundStore((store) => store.userInfo);
 
-  return [userProfile, setUserProfile];
+  useEffect(() => {
+    setUserProfileFormFields((prevState) => ({
+      ...prevState,
+      email: userInfo.email,
+      name: userInfo.name,
+    }));
+  }, [userInfo.email, userInfo.name]);
+
+  return [userProfileFormFields, setUserProfileFormFields];
 }
 
 export default useUserProfileFormFields;
