@@ -3,9 +3,10 @@ import { Table, Button } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
+import { useGetOrdersAdmin } from '../hooks/index';
 
 const OrderListScreen = () => {
-  const orders = [];
+  const { orders, isLoading, error } = useGetOrdersAdmin();
 
   return (
     <>
@@ -13,9 +14,7 @@ const OrderListScreen = () => {
       {isLoading ? (
         <Loader />
       ) : error ? (
-        <Message variant='danger'>
-          {error?.data?.message || error.error}
-        </Message>
+        <Message variant='danger'>{error?.message || error.error}</Message>
       ) : (
         <Table striped bordered hover responsive className='table-sm'>
           <thead>
