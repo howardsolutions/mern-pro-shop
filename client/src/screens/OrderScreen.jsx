@@ -43,7 +43,7 @@ const OrderScreen = () => {
     return actions.order.capture().then(async function (details) {
       try {
         await payOrder({ orderId, details });
-        refetchOrder(true);
+        refetchOrder((prevState) => !prevState);
         toast.success('Order is paid');
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -53,7 +53,7 @@ const OrderScreen = () => {
   // TESTING ONLY! REMOVE BEFORE PRODUCTION
   async function onApproveTest() {
     await payOrder({ orderId, details: { payer: {} } });
-    refetchOrder(true);
+    refetchOrder((prevState) => !prevState);
 
     toast.success('Order is paid');
   }
@@ -72,7 +72,7 @@ const OrderScreen = () => {
   async function deliverOrderHandler(orderId) {
     try {
       await deliverOrder(orderId);
-      refetchOrder(true);
+      refetchOrder((prevState) => !prevState);
       toast.success('Order delivered successfully');
     } catch (err) {
       toast.error(err?.data?.message || err.error);

@@ -16,7 +16,15 @@ export const createProductStore = (set) => ({
     }
   },
 
-  deleteProduct: async () => {},
+  deleteProduct: async (productId) => {
+    try {
+      set({ isDeleteProductLoading: true });
+      await axiosInstance.delete(`/api/products/${productId}`);
+    } catch (error) {
+      set({ isDeleteProductLoading: false });
+      throw error;
+    }
+  },
 
   editProduct: async () => {},
 });
