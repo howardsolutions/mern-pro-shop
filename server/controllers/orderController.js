@@ -62,6 +62,7 @@ const getMyOrders = asyncHanler(async (req, res) => {
  * @access PRIVATE
  */
 const getOrderById = asyncHanler(async (req, res) => {
+  // populate the 'user' field in 'order' document with the name and email from the 'user document'
   const order = await Order.findById(req.params.id).populate(
     'user',
     'name email'

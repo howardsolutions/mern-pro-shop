@@ -18,7 +18,7 @@ const loginUser = asyncHanler(async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  const isCorrectedPassword = await user.matchPassword(password);
+  const isCorrectedPassword = await user?.matchPassword(password);
 
   if (!user || !isCorrectedPassword) {
     res.status(401);
