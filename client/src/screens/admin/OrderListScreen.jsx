@@ -1,9 +1,9 @@
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
-import Message from '../components/Message';
-import Loader from '../components/Loader';
-import { useGetOrdersAdmin } from '../hooks/index';
+import Message from '../../components/Message';
+import Loader from '../../components/Loader';
+import { useGetOrdersAdmin } from '../../hooks/useGetOrdersAdmin';
 
 const OrderListScreen = () => {
   const { orders, isLoading, error } = useGetOrdersAdmin();
