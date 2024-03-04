@@ -3,6 +3,7 @@ import { axiosInstance } from '../axiosConfig';
 export const createOrderStore = (set) => ({
   isCreateOrderLoading: false,
   isPayOrderLoading: false,
+  isDeliverOrderLoading: false,
 
   createOrder: async (order) => {
     set({ isCreateOrderLoading: true });
@@ -32,6 +33,23 @@ export const createOrderStore = (set) => ({
       return updatedOrder;
     } catch (error) {
       set({ isPayOrderLoading: false });
+      throw error;
+    }
+  },
+
+  deliverOrder: async (orderId) => {
+    try {
+      set({ isDeliverOrderLoading: true });
+
+      const updatedOrder = await axiosInstance.put(
+        `api/orders/${orderId}/deliver`
+      );
+
+      set({ isDeliverOrderLoading: false });
+
+      return updatedOrder;
+    } catch (error) {
+      set({ isDeliverOrderLoading: false });
       throw error;
     }
   },

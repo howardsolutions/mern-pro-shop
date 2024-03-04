@@ -6,6 +6,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { useOrderDetails } from '../hooks/index';
 import { useBoundStore } from '../store/index';
+import { shallow } from 'zustand/shallow';
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -17,10 +18,24 @@ const OrderScreen = () => {
     refetch: refetchOrder,
   } = useOrderDetails(orderId);
 
-  const userInfo = useBoundStore((store) => store.userInfo);
+  const {
+    userInfo,
+    isPayOrderLoading,
+    payOrder,
+    deliverOrder,
+    isDeliverOrderLoading,
+  } = useBoundStore(
+    (store) => ({
+      userInfo: store.userInfo,
+      isPayOrderLoading: store.isPayOrderLoading,
+      payOrder: store.payOrder,
+      deliverOrder: store.deliverOrder,
+      isDeliverOrderLoading: store.isDeliverOrderLoading,
+    }),
+    shallow
+  );
 
-  const isPayOrderLoading = useBoundStore((store) => store.isPayOrderLoading);
-  const payOrder = useBoundStore((store) => store.payOrder);
+  const isAdminUser = userInfo && userInfo.isAdmin;
 
   const [{ isPending }, dispatch] = usePayPalScriptReducer();
 
@@ -52,6 +67,16 @@ const OrderScreen = () => {
         ],
       })
       .then((orderID) => orderID);
+  }
+
+  async function deliverOrderHandler(orderId) {
+    try {
+      await deliverOrder(orderId);
+      refetchOrder(true);
+      toast.success('Order delivered successfully');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
   }
 
   function onError(err) {
@@ -209,22 +234,19 @@ const OrderScreen = () => {
                 </ListGroup.Item>
               )}
 
-              {/* {loadingDeliver && <Loader />} */}
-              {/* 
-              {userInfo &&
-                userInfo.isAdmin &&
-                order.isPaid &&
-                !order.isDelivered && (
-                  <ListGroup.Item>
-                    <Button
-                      type='button'
-                      className='btn btn-block'
-                      onClick={deliverHandler}
-                    >
-                      Mark As Delivered
-                    </Button>
-                  </ListGroup.Item>
-                )} */}
+              {isDeliverOrderLoading && <Loader />}
+
+              {isAdminUser && order?.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type='button'
+                    className='btn btn-block'
+                    onClick={() => deliverOrderHandler(orderId)}
+                  >
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
