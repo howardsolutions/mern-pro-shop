@@ -26,5 +26,13 @@ export const createProductStore = (set) => ({
     }
   },
 
-  editProduct: async () => {},
+  editProduct: async ({ productId, updatedData }) => {
+    try {
+      set({ isEditProductLoading: true });
+      await axiosInstance.put(`/api/products/${productId}`, updatedData);
+    } catch (error) {
+      set({ isEditProductLoading: false });
+      throw error;
+    }
+  },
 });
