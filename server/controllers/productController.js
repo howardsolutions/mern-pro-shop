@@ -1,4 +1,4 @@
-import asyncHanler from '../middleware/asyncHandler.js';
+import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
 
 /**
@@ -6,7 +6,7 @@ import Product from '../models/productModel.js';
  * @route GET /api/products
  * @access PUBLIC
  */
-const getProducts = asyncHanler(async (req, res) => {
+const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({});
   res.json(products);
 });
@@ -16,7 +16,7 @@ const getProducts = asyncHanler(async (req, res) => {
  * @route GET /api/products/:id
  * @access PUBLIC
  */
-const getProductById = asyncHanler(async (req, res) => {
+const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -31,7 +31,7 @@ const getProductById = asyncHanler(async (req, res) => {
  * @route POST /api/products
  * @access PRIVATE ADMIN
  */
-const createProduct = asyncHanler(async (req, res) => {
+const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: 'Sample name',
     price: 0,
@@ -49,12 +49,12 @@ const createProduct = asyncHanler(async (req, res) => {
 });
 
 /**
- * Create a new Product
+ * Delete a product by Id
  * @route DELETE /api/products/:id
  * @access PRIVATE ADMIN
  */
 
-const deleteProductById = asyncHanler(async (req, res) => {
+const deleteProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (!product) {
@@ -66,4 +66,36 @@ const deleteProductById = asyncHanler(async (req, res) => {
   res.json({ message: 'Product deleted successfully' });
 });
 
-export { getProductById, getProducts, createProduct, deleteProductById };
+// @desc    Update a product by Id
+// @route   PUT /api/products/:id
+// @access  Private/Admin
+const updateProduct = asyncHandler(async (req, res) => {
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+
+  product.name = name;
+  product.price = price;
+  product.description = description;
+  product.image = image;
+  product.brand = brand;
+  product.category = category;
+  product.countInStock = countInStock;
+
+  const updatedProduct = await product.save();
+  res.json(updatedProduct);
+});
+
+export {
+  getProductById,
+  getProducts,
+  createProduct,
+  deleteProductById,
+  updateProduct,
+};
