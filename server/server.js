@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -45,7 +46,16 @@ app.use(cors(corsOptions));
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/orders', orderRoutes);
+
+// Route for Upload product images
 app.use('/api/upload', uploadRoutes);
+
+// use Static assets
+const __dirname = path.resolve();
+app.use(
+  '/uploads',
+  express.static(path.join(__dirname, '/client/public/uploads'))
+);
 
 // Paypal API
 app.get('/api/config/paypal', (req, res) =>
