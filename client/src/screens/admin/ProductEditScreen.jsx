@@ -5,46 +5,40 @@ import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import FormContainer from '../../components/FormContainer';
 import { toast } from 'react-toastify';
+import useEditProductFormFields from '../../hooks/index';
+import { useBoundStore } from '../../store/index';
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState(0);
-  const [image, setImage] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
-  const [countInStock, setCountInStock] = useState(0);
-  const [description, setDescription] = useState('');
+  const { isLoading, error, refetch, productDetailFormFields } =
+    useEditProductFormFields(productId);
 
-  const {
-    data: product,
-    isLoading,
-    refetch,
-    error,
-  } = useGetProductDetailsQuery(productId);
+  const { name, price, image, brand, category, description, countInStock } =
+    productDetailFormFields;
 
-  const [updateProduct, { isLoading: loadingUpdate }] =
-    useUpdateProductMutation();
+  const editProduct = useBoundStore((store) => store.editProduct);
 
-  const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation();
+  //   const [uploadProductImage, { isLoading: loadingUpload }] =
+  //     useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await updateProduct({
+      await editProduct({
         productId,
-        name,
-        price,
-        image,
-        brand,
-        category,
-        description,
-        countInStock,
-      }).unwrap(); // NOTE: here we need to unwrap the Promise to catch any rejection in our catch block
+        updatedData: {
+          name,
+          price,
+          image,
+          brand,
+          category,
+          description,
+          countInStock,
+        },
+      });
       toast.success('Product updated');
       refetch();
       navigate('/admin/productlist');
@@ -53,29 +47,17 @@ const ProductEditScreen = () => {
     }
   };
 
-  useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setPrice(product.price);
-      setImage(product.image);
-      setBrand(product.brand);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
-    }
-  }, [product]);
-
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    formData.append('image', e.target.files[0]);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage(res.image);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-  };
+  //   const uploadFileHandler = async (e) => {
+  //     const formData = new FormData();
+  //     formData.append('image', e.target.files[0]);
+  //     try {
+  //       const res = await uploadProductImage(formData).unwrap();
+  //       toast.success(res.message);
+  //       setImage(res.image);
+  //     } catch (err) {
+  //       toast.error(err?.data?.message || err.error);
+  //     }
+  //   };
 
   return (
     <>
@@ -121,7 +103,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
               <Form.Control
                 label='Choose File'
-                onChange={uploadFileHandler}
+                onChange={() => {}}
                 type='file'
               ></Form.Control>
               {loadingUpload && <Loader />}

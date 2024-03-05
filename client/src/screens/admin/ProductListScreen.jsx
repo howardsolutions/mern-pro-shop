@@ -20,7 +20,6 @@ const ProductListScreen = () => {
     isDeleteProductLoading,
     isEditProductLoading,
     deleteProduct,
-    editProduct,
   } = useBoundStore(
     (store) => ({
       createProduct: store.createProduct,
