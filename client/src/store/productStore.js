@@ -4,6 +4,7 @@ export const createProductStore = (set) => ({
   isCreateProductLoading: false,
   isDeleteProductLoading: false,
   isEditProductLoading: false,
+  isUploadingImage: false,
 
   createProduct: async () => {
     try {
@@ -35,6 +36,18 @@ export const createProductStore = (set) => ({
       set({ isEditProductLoading: false });
     } catch (error) {
       set({ isEditProductLoading: false });
+      throw error;
+    }
+  },
+
+  uploadProductImage: async (data) => {
+    try {
+      set({ isUploadingImage: true });
+      const res = axiosInstance.post(`/api/upload`, data);
+      set({ isUploadingImage: false });
+      return res;
+    } catch (error) {
+      set({ isUploadingImage: false });
       throw error;
     }
   },

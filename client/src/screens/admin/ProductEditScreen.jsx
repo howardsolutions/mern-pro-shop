@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import Message from '../../components/Message';
@@ -7,9 +6,11 @@ import FormContainer from '../../components/FormContainer';
 import { toast } from 'react-toastify';
 import { useEditProductFormFields } from '../../hooks';
 import { useBoundStore } from '../../store/index';
+import { shallow } from 'zustand/shallow';
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
+  const navigate = useNavigate();
 
   const {
     isLoading,
@@ -29,15 +30,20 @@ const ProductEditScreen = () => {
     countInStock = 0,
   } = productDetailFormFields;
 
-  const editProduct = useBoundStore((store) => store.editProduct);
-  const isEditProductLoading = useBoundStore(
-    (store) => store.isEditProductLoading
+  const {
+    editProduct,
+    isEditProductLoading,
+    uploadProductImage,
+    isUploadingImage,
+  } = useBoundStore(
+    (store) => ({
+      editProduct: store.editProduct,
+      isEditProductLoading: store.isEditProductLoading,
+      uploadProductImage: store.uploadProductImage,
+      isUploadingImage: store.isUploadingImage,
+    }),
+    shallow
   );
-
-  //   const [uploadProductImage, { isLoading: loadingUpload }] =
-  //     useUploadProductImageMutation();
-
-  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -62,25 +68,24 @@ const ProductEditScreen = () => {
     }
   };
 
-  //   const uploadFileHandler = async (e) => {
-  //     const formData = new FormData();
-  //     formData.append('image', e.target.files[0]);
-  //     try {
-  //       const res = await uploadProductImage(formData).unwrap();
-  //       toast.success(res.message);
-  //       setImage(res.image);
-  //     } catch (err) {
-  //       toast.error(err?.data?.message || err.error);
-  //     }
-  //   };
+  const uploadFileHandler = async (e) => {
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData);
+      toast.success(res.data.message);
+      handleUpdateFormFields('image', res.data.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
-  console.log(isLoading, isEditProductLoading);
   if (isLoading || isEditProductLoading) {
     return <Loader />;
   }
 
   if (error) {
-    return <Message variant='danger'>{error.data.message}</Message>;
+    return <Message variant='danger'>{error.data?.message}</Message>;
   }
 
   return (
@@ -122,10 +127,10 @@ const ProductEditScreen = () => {
             ></Form.Control>
             <Form.Control
               label='Choose File'
-              onChange={() => {}}
+              onChange={uploadFileHandler}
               type='file'
             ></Form.Control>
-            {/* {loadingUpload && <Loader />} */}
+            {isUploadingImage && <Loader />}
           </Form.Group>
 
           <Form.Group controlId='brand'>
