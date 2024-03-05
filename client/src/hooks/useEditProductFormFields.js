@@ -11,7 +11,7 @@ const initialOptions = {
   countInStock: 0,
 };
 
-function useEditProductFormFields(productId) {
+export function useEditProductFormFields(productId) {
   const [productDetailFormFields, setProductDetailsFormFields] =
     useState(initialOptions);
 
@@ -22,20 +22,30 @@ function useEditProductFormFields(productId) {
     refetch,
   } = useProductDetail(productId);
 
+  function handleUpdateFormFields(field, value) {
+    let newFormState = { ...productDetailFormFields };
+    newFormState[field] = value;
+    setProductDetailsFormFields(newFormState);
+  }
+
   useEffect(() => {
     setProductDetailsFormFields((prevState) => ({
       ...prevState,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      brand: product.brand,
-      category: product.category,
-      countInStock: product.countInStock,
-      description: product.description,
+      name: product?.name,
+      price: product?.price,
+      image: product?.image,
+      brand: product?.brand,
+      category: product?.category,
+      countInStock: product?.countInStock,
+      description: product?.description,
     }));
   }, [product]);
 
-  return { productDetailFormFields, isLoading, error, refetch };
+  return {
+    productDetailFormFields,
+    isLoading,
+    error,
+    refetch,
+    handleUpdateFormFields,
+  };
 }
-
-export default useEditProductFormFields;

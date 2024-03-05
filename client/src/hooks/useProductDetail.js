@@ -5,13 +5,13 @@ export function useProductDetail(productId) {
   const [productDetail, setProductDetail] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [refetch, setRefetch] = useState(false);
+  const [isRefetch, refetch] = useState(false);
 
   useEffect(() => {
     async function fetchProductDetails() {
       try {
         setIsLoading(true);
-        setError(false);
+        setError(null);
         const { data } = await axiosInstance.get(`/api/products/${productId}`);
         setProductDetail(data);
         setIsLoading(false);
@@ -22,7 +22,7 @@ export function useProductDetail(productId) {
     }
 
     fetchProductDetails();
-  }, [refetch]);
+  }, [isRefetch]);
 
   return { productDetail, isLoading, refetch, error };
 }

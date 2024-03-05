@@ -9,6 +9,7 @@ export const createProductStore = (set) => ({
     try {
       set({ isCreateProductLoading: true });
       const sampleCreatedProduct = await axiosInstance.post('/api/products');
+      set({ isCreateProductLoading: false });
       return sampleCreatedProduct;
     } catch (error) {
       set({ isCreateProductLoading: false });
@@ -20,6 +21,7 @@ export const createProductStore = (set) => ({
     try {
       set({ isDeleteProductLoading: true });
       await axiosInstance.delete(`/api/products/${productId}`);
+      set({ isDeleteProductLoading: false });
     } catch (error) {
       set({ isDeleteProductLoading: false });
       throw error;
@@ -30,6 +32,7 @@ export const createProductStore = (set) => ({
     try {
       set({ isEditProductLoading: true });
       await axiosInstance.put(`/api/products/${productId}`, updatedData);
+      set({ isEditProductLoading: false });
     } catch (error) {
       set({ isEditProductLoading: false });
       throw error;
