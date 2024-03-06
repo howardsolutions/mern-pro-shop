@@ -69,7 +69,7 @@ export const createAuthStore = (set) => ({
     try {
       set({ isDeletingUser: true });
 
-      await axiosInstance.delete(`/api/users/${userId}`, userData);
+      await axiosInstance.delete(`/api/users/${userId}`);
       set({ isDeletingUser: false });
     } catch (error) {
       set({ isDeletingUser: false });
@@ -77,6 +77,7 @@ export const createAuthStore = (set) => ({
     }
   },
 
+  // for admin user only
   updateUser: async ({ userId, name, email, isAdmin }) => {
     try {
       set({ isUpdatingUser: true });
