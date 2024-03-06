@@ -7,8 +7,23 @@ import Product from '../models/productModel.js';
  * @access PUBLIC
  */
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  const productLimit = process.env.PRODUCT_LIMIT;
+
+  const page = Number(req.query.pageNumber) || 1;
+
+  const totalNumOfProduct = await Product.countDocuments();
+
+  const products = await Product.find({})
+    .limit(productLimit)
+    .skip(productLimit * (page - 1));
+
+  // page = 3 => skip(5 * (3-1)) => skip(10) skip 10 products, get from product number 15 => 20 in the list
+
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(totalNumOfProduct / productLimit),
+  });
 });
 
 /**
