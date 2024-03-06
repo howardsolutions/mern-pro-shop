@@ -143,7 +143,8 @@ const updateUserProfile = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const getUsers = asyncHanler(async (req, res) => {
-  res.send('get users');
+  const users = await User.find({});
+  res.json(users);
 });
 
 /**
@@ -152,7 +153,14 @@ const getUsers = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const getUserById = asyncHanler(async (req, res) => {
-  res.send('get user by Id');
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  res.json(user);
 });
 
 /**
@@ -161,7 +169,14 @@ const getUserById = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const deleteUser = asyncHanler(async (req, res) => {
-  res.send('delete user');
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+  await User.findByIdAndDelete(req.params.id);
+  res.json({ message: 'User deleted!' });
 });
 
 /**
