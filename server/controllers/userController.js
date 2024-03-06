@@ -143,7 +143,7 @@ const updateUserProfile = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const getUsers = asyncHanler(async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).select('-password');
   res.json(users);
 });
 
@@ -153,7 +153,7 @@ const getUsers = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const getUserById = asyncHanler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.id).select('-password');
 
   if (!user) {
     res.status(404);
@@ -175,6 +175,7 @@ const deleteUser = asyncHanler(async (req, res) => {
     res.status(404);
     throw new Error('User not found');
   }
+
   await User.findByIdAndDelete(req.params.id);
   res.json({ message: 'User deleted!' });
 });
@@ -185,7 +186,25 @@ const deleteUser = asyncHanler(async (req, res) => {
  * @access Private/ Admin only
  */
 const updateUser = asyncHanler(async (req, res) => {
-  res.send('update user');
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  user.isAdmin = Boolean(req.body.isAdmin);
+
+  const updatedUser = await user.save();
+
+  res.json({
+    _id: updateUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
+  });
 });
 
 export {
