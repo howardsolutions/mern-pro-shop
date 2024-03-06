@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../axiosConfig';
 
-export function useProducts(pageNumber, keywords) {
+function getFilterParams(pageNumber, keywords) {
+  if (pageNumber || keywords) {
+    return {
+      ...(pageNumber && { pageNumber }),
+      ...(keywords && { keywords }),
+    };
+  }
+
+  return null;
+}
+
+export function useProducts({ pageNumber, keywords }) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,11 +23,8 @@ export function useProducts(pageNumber, keywords) {
       try {
         setIsLoading(true);
         setError(null);
-        const { data } = await axiosInstance.get(`/api/products`, null, {
-          params: {
-            pageNumber,
-            keywords,
-          },
+        const { data } = await axiosInstance.get(`/api/products`, {
+          params: getFilterParams(pageNumber, keywords),
         });
         setProducts(data);
         setIsLoading(false);
@@ -29,5 +37,5 @@ export function useProducts(pageNumber, keywords) {
     fetchProducts();
   }, [isRefresh]);
 
-  return { products, refetch, isLoading, error };
+  return { data: products, refetch, isLoading, error };
 }

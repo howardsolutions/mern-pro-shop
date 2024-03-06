@@ -32,7 +32,7 @@ const ProductListScreen = () => {
     shallow
   );
 
-  const { products, isLoading, error, refetch } = useProducts({
+  const { data, isLoading, error, refetch } = useProducts({
     pageNumber,
   });
 
@@ -96,29 +96,31 @@ const ProductListScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {products?.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.brand}</td>
-                <td>
-                  <LinkContainer to={`/admin/product/${product._id}/edit`}>
-                    <Button variant='light' className='btn-sm mx-2'>
-                      <FaEdit />
+            {data &&
+              data.product &&
+              data.products.map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+                  <td>{product.brand}</td>
+                  <td>
+                    <LinkContainer to={`/admin/product/${product._id}/edit`}>
+                      <Button variant='light' className='btn-sm mx-2'>
+                        <FaEdit />
+                      </Button>
+                    </LinkContainer>
+                    <Button
+                      variant='danger'
+                      className='btn-sm'
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <FaTrash style={{ color: 'white' }} />
                     </Button>
-                  </LinkContainer>
-                  <Button
-                    variant='danger'
-                    className='btn-sm'
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <FaTrash style={{ color: 'white' }} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </Table>
         <Paginate pages={10} page={1} isAdmin={true} />
