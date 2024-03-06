@@ -5,6 +5,7 @@ export const createProductStore = (set) => ({
   isDeleteProductLoading: false,
   isEditProductLoading: false,
   isUploadingImage: false,
+  isLoadingProductReview: false,
 
   createProduct: async () => {
     try {
@@ -48,6 +49,21 @@ export const createProductStore = (set) => ({
       return res;
     } catch (error) {
       set({ isUploadingImage: false });
+      throw error;
+    }
+  },
+
+  createProductReviews: async ({ productId, comment, rating }) => {
+    try {
+      set({ isLoadingProductReview: true });
+      const res = axiosInstance.post(`/api/products/${productId}/reviews`, {
+        rating,
+        comment,
+      });
+      set({ isLoadingProductReview: false });
+      return res;
+    } catch (error) {
+      set({ isLoadingProductReview: false });
       throw error;
     }
   },
