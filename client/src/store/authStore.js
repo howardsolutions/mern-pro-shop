@@ -9,6 +9,7 @@ export const createAuthStore = (set) => ({
   isLoadingRegister: false,
   isLoadingUpdateProfile: false,
   isDeletingUser: false,
+  isUpdatingUser: false,
 
   login: async ({ email, password }) => {
     try {
@@ -63,14 +64,27 @@ export const createAuthStore = (set) => ({
     }
   },
 
+  // for admin user only
   deleteUser: async (userId) => {
     try {
       set({ isDeletingUser: true });
 
-      await axiosInstance.delete(`/api/users`, userData);
+      await axiosInstance.delete(`/api/users/${userId}`, userData);
       set({ isDeletingUser: false });
     } catch (error) {
       set({ isDeletingUser: false });
+      throw error;
+    }
+  },
+
+  updateUser: async ({ userId, name, email, isAdmin }) => {
+    try {
+      set({ isUpdatingUser: true });
+
+      await axiosInstance.put(`/api/users/${userId}`, { name, email, isAdmin });
+      set({ isUpdatingUser: false });
+    } catch (error) {
+      set({ isUpdatingUser: false });
       throw error;
     }
   },
