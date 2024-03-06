@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createProduct,
+  createProductReview,
   deleteProductById,
   getProductById,
   getProducts,
