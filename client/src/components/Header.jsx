@@ -5,6 +5,7 @@ import logo from '../../public/assets/logo.png';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useBoundStore } from '../store/index';
 import { useNavigate } from 'react-router-dom';
+import SearchBox from './SearchBox';
 
 export function Header() {
   const cartItems = useBoundStore((store) => store.cartItems);
@@ -34,6 +35,7 @@ export function Header() {
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
+            <SearchBox />
             <Nav className='ms-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link>
