@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import { Carousel, Image } from 'react-bootstrap';
 import Message from './Message';
 import Loader from './Loader';
-import { useGetTopProductsQuery } from '../slices/productsApiSlice';
+import { useGetTopProducts } from '../hooks/useGetTopProducts';
 
 const ProductCarousel = () => {
-  const { data: products, isLoading, error } = useGetTopProductsQuery();
+  const { topProducts: products, isLoading, error } = useGetTopProducts();
 
   if (isLoading) {
     return <Loader />;
