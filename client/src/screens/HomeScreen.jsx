@@ -26,8 +26,8 @@ function HomeScreenPage() {
       </Row>
       <Paginate
         pages={data?.pages}
-        page={data?.page}
-        keyword={keywords ? keywords : ''}
+        currentPage={data?.page}
+        keywords={keywords ? keywords : ''}
       />
     </div>
   );

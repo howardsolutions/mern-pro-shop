@@ -12,7 +12,7 @@ import { useProducts } from '../../hooks/useProducts';
 import { shallow } from 'zustand/shallow';
 
 const ProductListScreen = () => {
-  const { pageNumber } = useParams();
+  const { pageNumber, keywords } = useParams();
 
   const {
     createProduct,
@@ -35,8 +35,6 @@ const ProductListScreen = () => {
   const { data, isLoading, error, refetch } = useProducts({
     pageNumber,
   });
-
-  console.log(data, 'dcm');
 
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure')) {
@@ -125,7 +123,12 @@ const ProductListScreen = () => {
               ))}
           </tbody>
         </Table>
-        <Paginate pages={data && data.pages} page={pageNumber} isAdmin={true} />
+        <Paginate
+          keywords={keywords}
+          pages={data && data.pages}
+          currentPage={pageNumber}
+          isAdmin={true}
+        />
       </>
     </>
   );
