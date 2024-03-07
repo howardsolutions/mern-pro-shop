@@ -36,6 +36,8 @@ const ProductListScreen = () => {
     pageNumber,
   });
 
+  console.log(data, 'dcm');
+
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure')) {
       try {
@@ -97,7 +99,7 @@ const ProductListScreen = () => {
           </thead>
           <tbody>
             {data &&
-              data.product &&
+              data.products &&
               data.products.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
@@ -123,7 +125,7 @@ const ProductListScreen = () => {
               ))}
           </tbody>
         </Table>
-        <Paginate pages={10} page={1} isAdmin={true} />
+        <Paginate pages={data && data.pages} page={pageNumber} isAdmin={true} />
       </>
     </>
   );

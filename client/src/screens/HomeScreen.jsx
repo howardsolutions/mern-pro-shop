@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Product } from '../components';
 import { useProducts } from '../hooks/index';
 import Loader from '../components/Loader';
 import { useParams } from 'react-router-dom';
+import Paginate from '../components/Paginate';
 
 function HomeScreenPage() {
-  const { pageNumber } = useParams();
-  const { data, isLoading } = useProducts({ pageNumber });
+  const { pageNumber, keywords } = useParams();
+  const { data, isLoading } = useProducts({ pageNumber, keywords });
 
   if (isLoading) return <Loader />;
 
@@ -23,6 +24,11 @@ function HomeScreenPage() {
             </Col>
           ))}
       </Row>
+      <Paginate
+        pages={data?.pages}
+        page={data?.page}
+        keyword={keywords ? keywords : ''}
+      />
     </div>
   );
 }

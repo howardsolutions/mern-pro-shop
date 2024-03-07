@@ -13,7 +13,7 @@ function getFilterParams(pageNumber, keywords) {
 }
 
 export function useProducts({ pageNumber, keywords }) {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isRefresh, refetch] = useState(false);
@@ -35,7 +35,7 @@ export function useProducts({ pageNumber, keywords }) {
     }
 
     fetchProducts();
-  }, [isRefresh]);
+  }, [isRefresh, pageNumber, keywords]);
 
   return { data: products, refetch, isLoading, error };
 }
