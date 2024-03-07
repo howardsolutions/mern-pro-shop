@@ -165,7 +165,7 @@ const createProductReview = asyncHandler(async (req, res) => {
 
 // get 3 top products with Rating in the descending order
 const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  const products = await Product.find({}).sort({ ratings: -1 }).limit(3);
 
   res.json(products);
 });
