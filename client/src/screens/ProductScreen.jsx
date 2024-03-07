@@ -14,6 +14,7 @@ import { useProductDetail } from '../hooks/index';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import { useBoundStore } from '../store/index';
+import Meta from '../components/Meta';
 
 function ProductScreen() {
   const { id: productId } = useParams();
@@ -78,6 +79,7 @@ function ProductScreen() {
       </Link>
 
       <Row>
+        <Meta title={product?.name} />
         <Col md={5}>
           <Image src={product?.image} alt={product?.name} fluid />
         </Col>

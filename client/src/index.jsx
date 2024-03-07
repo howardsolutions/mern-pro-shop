@@ -10,6 +10,8 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 
+import { HelmetProvider } from 'react-helmet-async';
+
 // UI PAGE
 import HomeScreenPage from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
@@ -70,6 +72,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <HelmetProvider>
+      <RouterProvider router={router} />
+    </HelmetProvider>
   </React.StrictMode>
 );

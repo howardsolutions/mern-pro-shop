@@ -5,6 +5,7 @@ import { useProducts } from '../hooks/index';
 import Loader from '../components/Loader';
 import { Link, useParams } from 'react-router-dom';
 import Paginate from '../components/Paginate';
+import Meta from '../components/Meta';
 import ProductCarousel from '../components/ProductCarousel';
 
 function HomeScreenPage() {
@@ -23,6 +24,7 @@ function HomeScreenPage() {
         </Link>
       )}
       <>
+        <Meta />
         <h1>Latest Product</h1>
         <Row>
           {data &&
