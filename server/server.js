@@ -51,11 +51,30 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 
 // use Static assets
-const __dirname = path.resolve();
-app.use(
-  '/uploads',
-  express.static(path.join(__dirname, '/client/public/uploads'))
-);
+if (process.env.NODE_ENV !== 'production') {
+  const __dirname = path.resolve();
+  app.use(
+    '/uploads',
+    express.static(path.join(__dirname, '/client/public/uploads'))
+  );
+}
+
+if (process.env.NODE_ENV === 'production') {
+  const __dirname = path.resolve();
+  // set static folder
+  app.use(
+    '/uploads',
+    express.static(path.join(__dirname, '..', '/dist/uploads'))
+  );
+
+  app.use(express.static(path.join(__dirname, '..', '/client/dist')));
+
+  // any route that is not api will be redirectioned to index.html
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'))
+  );
+}
 
 // Paypal API
 app.get('/api/config/paypal', (req, res) =>
