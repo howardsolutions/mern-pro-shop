@@ -64,4 +64,19 @@ export const createCartStore = (set) => ({
     ),
 
   clearCartItems: () => set({ cartItems: [] }, false, 'clearCartItems'),
+
+  resetCart: () =>
+    set(
+      {
+        cartItems: [],
+        shippingAddress: null,
+        paymentMethod: 'PayPal',
+        itemsPrice: null,
+        shippingPrice: null,
+        taxPrice: null,
+        totalPrice: null,
+      },
+      false,
+      'resetCart'
+    ),
 });

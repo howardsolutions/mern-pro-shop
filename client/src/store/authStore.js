@@ -30,6 +30,7 @@ export const createAuthStore = (set) => ({
     try {
       await axiosInstance.post(`/api/users/logout`);
       set({ userInfo: null });
+      localStorage.removeItem('boundStore');
     } catch (error) {
       throw error;
     }

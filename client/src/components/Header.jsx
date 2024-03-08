@@ -11,12 +11,14 @@ export function Header() {
   const cartItems = useBoundStore((store) => store.cartItems);
   const userInfo = useBoundStore((store) => store.userInfo);
   const logout = useBoundStore((store) => store.logout);
+  const resetCart = useBoundStore((store) => store.resetCart);
   const navigate = useNavigate();
   const totalItemsInCart = cartItems.reduce((acc, cur) => acc + cur.qty, 0);
 
   async function logoutHandler() {
     try {
       await logout();
+      resetCart();
       navigate('/login');
     } catch (err) {
       console.log(err);
