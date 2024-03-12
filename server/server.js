@@ -35,7 +35,10 @@ app.use(cookieParser());
 
 // Enable CORS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin:
+    process.env.NODE_ENV !== 'production'
+      ? 'http://localhost:3000'
+      : process.env.FRONTEND_BASE_URL,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
@@ -64,7 +67,7 @@ if (process.env.NODE_ENV === 'production') {
   // set static folder
   app.use(
     '/uploads',
-    express.static(path.join(__dirname, '..', '/dist/uploads'))
+    express.static(path.join(__dirname, '..', '/client/dist/uploads'))
   );
 
   app.use(express.static(path.join(__dirname, '..', '/client/dist')));

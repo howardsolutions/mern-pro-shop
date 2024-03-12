@@ -22,7 +22,7 @@ const addOrderItems = asyncHanler(async (req, res) => {
   }
 
   const order = new Order({
-    orderItems: orderItems.map((orderItem) => ({
+    orderItems: orderItems?.map((orderItem) => ({
       ...orderItem,
       product: orderItem._id,
       _id: undefined,

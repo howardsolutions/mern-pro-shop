@@ -22,7 +22,7 @@ async function importData() {
     const adminUsersId = createdUsers.at(0)._id;
 
     // all initial products are created by the admin user
-    const sampleProducts = await products.map((product) => {
+    const sampleProducts = await products?.map((product) => {
       return { ...product, user: adminUsersId };
     });
 
