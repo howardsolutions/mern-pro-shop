@@ -49,7 +49,7 @@ const UserListScreen = () => {
         </thead>
         <tbody>
           {users &&
-            users.map((user) => (
+            users?.map((user) => (
               <tr key={user._id}>
                 <td>{user._id}</td>
                 <td>{user.name}</td>

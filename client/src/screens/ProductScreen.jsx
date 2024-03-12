@@ -137,7 +137,7 @@ function ProductScreen() {
                         value={qty}
                         onChange={(e) => setQty(Number(e.target.value))}
                       >
-                        {[...Array(product?.countInStock).keys()].map((x) => (
+                        {[...Array(product?.countInStock).keys()]?.map((x) => (
                           <option key={x + 1} value={x + 1}>
                             {x + 1}
                           </option>
@@ -168,7 +168,7 @@ function ProductScreen() {
           <h2>Reviews</h2>
           {product?.reviews.length === 0 && <Message>No Reviews</Message>}
           <ListGroup variant='flush'>
-            {product?.reviews.map((review) => (
+            {product?.reviews?.map((review) => (
               <ListGroup.Item key={review._id}>
                 <strong>{review.name}</strong>
                 <Rating value={review.rating} />

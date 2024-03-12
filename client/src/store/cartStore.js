@@ -24,7 +24,7 @@ export const createCartStore = (set) => ({
           store.cartItems = [...store.cartItems, item];
         } else {
           // Item already exists => increase the quantity by replace with new item (passed in params) with updated quantity
-          store.cartItems = store.cartItems.map((cartItem) =>
+          store.cartItems = store.cartItems?.map((cartItem) =>
             cartItem._id === existItem._id ? item : cartItem
           );
         }
