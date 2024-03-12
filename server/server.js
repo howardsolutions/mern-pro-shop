@@ -88,6 +88,10 @@ app.get('/api/config/paypal', (req, res) =>
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, 'localhost', () =>
+// app.listen(PORT, 'localhost', () =>
+//   console.log(`Server listening on ${PORT} 🚀`)
+// );
+
+app.listen(PORT, '0.0.0.0', () =>
   console.log(`Server listening on ${PORT} 🚀`)
 );
