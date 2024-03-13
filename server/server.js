@@ -35,10 +35,7 @@ app.use(cookieParser());
 
 // Enable CORS
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV !== 'production'
-      ? 'http://localhost:3000'
-      : process.env.FRONTEND_BASE_URL,
+  origin: true,
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
