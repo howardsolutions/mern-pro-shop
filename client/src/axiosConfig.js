@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { BASE_URL } from './constants';
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.BASE_URL || 'http://localhost:4000',
   withCredentials: true,
 });
