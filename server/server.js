@@ -53,15 +53,12 @@ app.use('/api/orders', orderRoutes);
 // Route for Upload product images
 app.use('/api/upload', uploadRoutes);
 
-// use Static assets
-if (process.env.NODE_ENV !== 'production') {
-  const __dirname = path.resolve();
-  app.use(
-    '/uploads',
-    express.static(path.join(__dirname, '/client/public/uploads'))
-  );
-}
+// Paypal API
+app.get('/api/config/paypal', (req, res) =>
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
+);
 
+// use Static assets
 if (process.env.NODE_ENV === 'production') {
   const __dirname = path.resolve();
   // set static folder
@@ -71,18 +68,16 @@ if (process.env.NODE_ENV === 'production') {
   );
 
   app.use(express.static(path.join(__dirname, '..', '/client/dist')));
-
-  // any route that is not api will be redirectioned to index.html
-
-  app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'))
+} else {
+  const __dirname = path.resolve();
+  app.use(
+    '/uploads',
+    express.static(path.join(__dirname, '/client/public/uploads'))
   );
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
 }
-
-// Paypal API
-app.get('/api/config/paypal', (req, res) =>
-  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
-);
 
 // Custom Error Handler Middleware
 app.use(notFound);
@@ -92,6 +87,8 @@ app.use(errorHandler);
 //   console.log(`Server listening on ${PORT} 🚀`)
 // );
 
-app.listen(PORT, '0.0.0.0', () =>
-  console.log(`Server listening on ${PORT} 🚀`)
+app.listen(PORT, () =>
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT} 🚀`
+  )
 );
